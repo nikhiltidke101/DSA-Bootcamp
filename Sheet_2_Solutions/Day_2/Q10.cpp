@@ -1,101 +1,50 @@
 #include <bits/stdc++.h>
-
 using namespace std;
 
-string ltrim(const string &);
-string rtrim(const string &);
-vector<string> split(const string &);
-
 /*
- * Complete the 'miniMaxSum' function below.
+ * Complete the 'timeConversion' function below.
  *
- * The function accepts INTEGER_ARRAY arr as parameter.
+ * The function is expected to return a STRING.
+ * The function accepts STRING s as parameter.
  */
 
-void miniMaxSum(vector<int> arr) {
+string timeConversion(string s) {
     // Solution
-    long max = 0 ,min = INFINITY, max_sum=0, min_sum=0;
-    for (int i =0;i<arr.size();i++){
-        if (arr[i]<min){
-            min = arr[i];
-        }
-        if (arr[i]>max) {
-            max = arr[i];
-        }
+    int n = s.length();
+    int hh, mm, ss;
+    hh = (s[0] - '0') * 10 + (s[1] - '0');
+    
+    if (hh < 12 && s[8] == 'P'){
+        hh += 12;
     }
-    for (int i =0;i<arr.size();i++){
-        if (max == min){
-            min_sum += arr[i+1];
-            max_sum =min_sum;   
-        }else{
-            if (arr[i]!=min){
-                max_sum+=arr[i];
-            }
-            if (arr[i]!=max){
-                min_sum+=arr[i];
-            }
-        }
-    }    
-    cout<<min_sum<<" "<<max_sum;
+    if (hh == 12 && s[8] == 'A'){ 
+        hh = 0;
+    }
+    
+    string new_hh = "";
+    if (hh < 10){
+        new_hh = "0"+to_string(hh);
+    }
+    else{
+        new_hh = to_string(hh);
+    }
+    
+    return new_hh+":"+s.substr(3,2)+":"+s.substr(6,2); 
     //
 }
 
 int main()
 {
+    ofstream fout(getenv("OUTPUT_PATH"));
 
-    string arr_temp_temp;
-    getline(cin, arr_temp_temp);
+    string s;
+    getline(cin, s);
 
-    vector<string> arr_temp = split(rtrim(arr_temp_temp));
+    string result = timeConversion(s);
 
-    vector<int> arr(5);
+    fout << result << "\n";
 
-    for (int i = 0; i < 5; i++) {
-        int arr_item = stoi(arr_temp[i]);
-
-        arr[i] = arr_item;
-    }
-
-    miniMaxSum(arr);
+    fout.close();
 
     return 0;
-}
-
-string ltrim(const string &str) {
-    string s(str);
-
-    s.erase(
-        s.begin(),
-        find_if(s.begin(), s.end(), not1(ptr_fun<int, int>(isspace)))
-    );
-
-    return s;
-}
-
-string rtrim(const string &str) {
-    string s(str);
-
-    s.erase(
-        find_if(s.rbegin(), s.rend(), not1(ptr_fun<int, int>(isspace))).base(),
-        s.end()
-    );
-
-    return s;
-}
-
-vector<string> split(const string &str) {
-    vector<string> tokens;
-
-    string::size_type start = 0;
-    string::size_type end = 0;
-
-    while ((end = str.find(" ", start)) != string::npos) {
-        tokens.push_back(str.substr(start, end - start));
-
-        start = end + 1;
-    }
-
-    tokens.push_back(str.substr(start));
-
-    return tokens;
 }
